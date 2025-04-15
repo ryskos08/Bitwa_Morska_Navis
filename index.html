@@ -1,18 +1,46 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Morska Bitwa: Navis</title>
-  <link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morska Bitwa - Navis</title>
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 30px);
+            grid-template-rows: repeat(12, 30px);
+            gap: 2px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #000;
+            background-color: lightblue;
+        }
+        .hit {
+            background-color: red;
+        }
+        .miss {
+            background-color: white;
+        }
+        .sonar {
+            background-color: lightblue;
+        }
+    </style>
 </head>
 <body>
-  <h1>Morska Bitwa</h1>
-  <div id="game">
+
+    <h1>Morska Bitwa - Navis</h1>
+
     <div id="grid" class="grid"></div>
-    <button id="botTurn">Wykonaj turę bota</button>
+    <h2>Plansza Bota</h2>
+    <div id="enemyGrid" class="grid"></div>
+
     <div id="log"></div>
-  </div>
-  <script src="script.js"></script>
+
+    <button id="botTurn">Wykonaj turę bota</button>
+
+    <script src="script.js"></script>
 </body>
 </html>
