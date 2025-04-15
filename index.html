@@ -5,12 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Morska Bitwa - Navis</title>
     <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .grid-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
         .grid {
             display: grid;
             grid-template-columns: repeat(12, 30px);
             grid-template-rows: repeat(12, 30px);
             gap: 2px;
-            margin-bottom: 20px;
+            margin-right: 20px;
         }
         .cell {
             width: 30px;
@@ -33,9 +44,10 @@
 
     <h1>Morska Bitwa - Navis</h1>
 
-    <div id="grid" class="grid"></div>
-    <h2>Plansza Bota</h2>
-    <div id="enemyGrid" class="grid"></div>
+    <div class="grid-container">
+        <div id="grid" class="grid"></div>
+        <div id="enemyGrid" class="grid"></div>
+    </div>
 
     <div id="log"></div>
 
