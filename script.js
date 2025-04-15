@@ -6,6 +6,8 @@ const botBtn = document.getElementById('botTurn');
 const size = 12;
 const cells = [];
 const enemyCells = [];
+let playerShips = [];
+let botShips = [];
 
 // Funkcja logująca raport
 function logMsg(msg) {
@@ -33,30 +35,28 @@ function createGrid() {
     }
 }
 
-function getRandomCell() {
-    const x = Math.floor(Math.random() * size);
-    const y = Math.floor(Math.random() * size);
-    return { x, y };
+// Tworzymy statki dla gracza i bota
+function createShip(x, y, size, isPlayer) {
+    const ship = { x, y, size, cells: [] };
+    for (let i = 0; i < size; i++) {
+        const cell = (isPlayer ? cells : enemyCells).find(c => c.dataset.x == x + i && c.dataset.y == y);
+        ship.cells.push(cell);
+        cell.classList.add(isPlayer ? 'player-ship' : 'bot-ship');
+    }
+    return ship;
 }
 
 // Funkcja na turę bota
 function botTurn() {
     const { x, y } = getRandomCell();
     const cell = cells.find(c => c.dataset.x == x && c.dataset.y == y);
-    const enemyCell = enemyCells.find(c => c.dataset.x == x && c.dataset.y == y);
     
     if (!cell.classList.contains('hit') && !cell.classList.contains('miss')) {
         const hit = Math.random() < 0.3; // 30% szansa na trafienie
         cell.classList.add(hit ? 'hit' : 'miss');
         
-        // Aktualizowanie planszy bota
-        if (hit) {
-            enemyCell.classList.add('hit');
-            logMsg(`Bot strzelił w (${x + 1}, ${y + 1}) – TRAFIONY!`);
-        } else {
-            enemyCell.classList.add('miss');
-            logMsg(`Bot strzelił w (${x + 1}, ${y + 1}) – Pudło.`);
-        }
+        // Raport
+        logMsg(`Bot strzelił w (${x + 1}, ${y + 1}) – ${hit ? 'TRAFIONY!' : 'Pudło.'}`);
     } else {
         botTurn(); // Jeśli pole już zostało trafione, wybieramy inne
     }
