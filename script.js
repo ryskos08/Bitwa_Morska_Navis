@@ -8,9 +8,7 @@ const cells = [];
 const enemyCells = [];
 
 function logMsg(msg) {
-    const p = document.createElement('p');
-    p.textContent = msg;
-    log.prepend(p);
+    console.log(msg);  // Zmiana: zamiast dodawania do DOM, teraz logujemy do konsoli
 }
 
 function createGrid() {
@@ -74,6 +72,7 @@ function useSonar(x, y) {
                 const cell = enemyCells.find(c => c.dataset.x == newX && c.dataset.y == newY);
                 if (Math.random() < 0.5) { // 50% szansa na wykrycie
                     cell.classList.add('sonar');
+                    logMsg(`Sonar wykrył moduł w (${newX + 1}, ${newY + 1})`);
                 }
             }
         }
