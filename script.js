@@ -8,7 +8,7 @@ const cells = [];
 const enemyCells = [];
 
 function logMsg(msg) {
-    console.log(msg);  // Zmiana: zamiast dodawania do DOM, teraz logujemy do konsoli
+    log.textContent += msg + '\n'; // Zamiast logować do konsoli, dodajemy do div'a
 }
 
 function createGrid() {
