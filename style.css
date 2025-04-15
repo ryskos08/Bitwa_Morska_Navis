@@ -1,0 +1,40 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #e0f7fa;
+  padding: 20px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 30px);
+  grid-template-rows: repeat(12, 30px);
+  gap: 2px;
+  margin: 20px auto;
+  width: fit-content;
+}
+
+.cell {
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.cell.hit {
+  background: red;
+}
+
+.cell.miss {
+  background: #bbb;
+}
+
+#log {
+  margin-top: 20px;
+  max-height: 150px;
+  overflow-y: auto;
+  text-align: left;
+  background: #f1f1f1;
+  padding: 10px;
+}
