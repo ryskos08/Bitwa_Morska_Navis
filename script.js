@@ -91,4 +91,7 @@ botBtn.addEventListener('click', () => {
 });
 
 // Przykład użycia sonaru – przycisk do testu
-const sonarBtn = document.createElement('button
+const sonarBtn = document.createElement('button');
+sonarBtn.textContent = 'Użyj sonaru';
+document.body.appendChild(sonarBtn);
+sonarBtn.addEventListener('click', () => useSonar(5, 5)); // Przykładowe współrzędne
