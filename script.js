@@ -7,10 +7,12 @@ const size = 12;
 const cells = [];
 const enemyCells = [];
 
+// Funkcja logująca raport
 function logMsg(msg) {
     log.textContent += msg + '\n'; // Zamiast logować do konsoli, dodajemy do div'a
 }
 
+// Tworzymy siatkę
 function createGrid() {
     for (let y = 0; y < size; y++) {
         for (let x = 0; x < size; x++) {
@@ -37,6 +39,7 @@ function getRandomCell() {
     return { x, y };
 }
 
+// Funkcja na turę bota
 function botTurn() {
     const { x, y } = getRandomCell();
     const cell = cells.find(c => c.dataset.x == x && c.dataset.y == y);
@@ -55,10 +58,11 @@ function botTurn() {
             logMsg(`Bot strzelił w (${x + 1}, ${y + 1}) – Pudło.`);
         }
     } else {
-        botTurn();
+        botTurn(); // Jeśli pole już zostało trafione, wybieramy inne
     }
 }
 
+// Funkcja używająca sonaru
 function useSonar(x, y) {
     logMsg(`Sonar użyty w (${x + 1}, ${y + 1})`);
     
@@ -80,10 +84,11 @@ function useSonar(x, y) {
 }
 
 createGrid();
-botBtn.addEventListener('click', botTurn);
+botBtn.addEventListener('click', () => {
+    // Zresetuj raport
+    log.textContent = ''; 
+    botTurn();
+});
 
 // Przykład użycia sonaru – przycisk do testu
-const sonarBtn = document.createElement('button');
-sonarBtn.textContent = 'Użyj sonaru';
-document.body.appendChild(sonarBtn);
-sonarBtn.addEventListener('click', () => useSonar(5, 5)); // Przykładowe współrzędne
+const sonarBtn = document.createElement('button
