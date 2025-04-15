@@ -1,97 +1,82 @@
-const grid = document.getElementById('grid');
-const enemyGrid = document.getElementById('enemyGrid');
-const log = document.getElementById('log');
+const captainSelection = document.getElementById('captainSelection');
+const shipPlacement = document.getElementById('shipPlacement');
+const startBtn = document.getElementById('startBtn');
+const gridPlayer = document.getElementById('gridPlayer');
+const gridBot = document.getElementById('gridBot');
 const botBtn = document.getElementById('botTurn');
+const log = document.getElementById('log');
 
-const size = 12;
-const cells = [];
-const enemyCells = [];
-let playerShips = [];
-let botShips = [];
+let playerShipPositions = [];
+let captainSelected = null;
 
 // Funkcja logująca raport
 function logMsg(msg) {
     log.textContent += msg + '\n'; // Zamiast logować do konsoli, dodajemy do div'a
 }
 
-// Tworzymy siatkę
-function createGrid() {
-    for (let y = 0; y < size; y++) {
-        for (let x = 0; x < size; x++) {
+// Funkcja tworząca siatkę
+function createGrid(isPlayer) {
+    const grid = isPlayer ? gridPlayer : gridBot;
+    grid.innerHTML = ''; // Czyszczenie przed każdą nową planszą
+
+    for (let y = 0; y < 12; y++) {
+        for (let x = 0; x < 12; x++) {
             const cell = document.createElement('div');
             cell.classList.add('cell');
             cell.dataset.x = x;
             cell.dataset.y = y;
             grid.appendChild(cell);
-            cells.push(cell);
-
-            const enemyCell = document.createElement('div');
-            enemyCell.classList.add('cell');
-            enemyCell.dataset.x = x;
-            enemyCell.dataset.y = y;
-            enemyGrid.appendChild(enemyCell);
-            enemyCells.push(enemyCell);
         }
     }
 }
 
-// Tworzymy statki dla gracza i bota
-function createShip(x, y, size, isPlayer) {
-    const ship = { x, y, size, cells: [] };
+// Funkcja ustawienia okrętu
+function placeShip(x, y, size, isPlayer) {
+    const cells = (isPlayer ? gridPlayer : gridBot).querySelectorAll('.cell');
     for (let i = 0; i < size; i++) {
-        const cell = (isPlayer ? cells : enemyCells).find(c => c.dataset.x == x + i && c.dataset.y == y);
-        ship.cells.push(cell);
-        cell.classList.add(isPlayer ? 'player-ship' : 'bot-ship');
-    }
-    return ship;
-}
-
-// Funkcja na turę bota
-function botTurn() {
-    const { x, y } = getRandomCell();
-    const cell = cells.find(c => c.dataset.x == x && c.dataset.y == y);
-    
-    if (!cell.classList.contains('hit') && !cell.classList.contains('miss')) {
-        const hit = Math.random() < 0.3; // 30% szansa na trafienie
-        cell.classList.add(hit ? 'hit' : 'miss');
-        
-        // Raport
-        logMsg(`Bot strzelił w (${x + 1}, ${y + 1}) – ${hit ? 'TRAFIONY!' : 'Pudło.'}`);
-    } else {
-        botTurn(); // Jeśli pole już zostało trafione, wybieramy inne
-    }
-}
-
-// Funkcja używająca sonaru
-function useSonar(x, y) {
-    logMsg(`Sonar użyty w (${x + 1}, ${y + 1})`);
-    
-    // Przeszukujemy obszar 3x3 wokół (x, y) i oznaczamy wyniki
-    for (let dy = -1; dy <= 1; dy++) {
-        for (let dx = -1; dx <= 1; dx++) {
-            const newX = x + dx;
-            const newY = y + dy;
-
-            if (newX >= 0 && newX < size && newY >= 0 && newY < size) {
-                const cell = enemyCells.find(c => c.dataset.x == newX && c.dataset.y == newY);
-                if (Math.random() < 0.5) { // 50% szansa na wykrycie
-                    cell.classList.add('sonar');
-                    logMsg(`Sonar wykrył moduł w (${newX + 1}, ${newY + 1})`);
-                }
-            }
+        const cell = Array.from(cells).find(c => c.dataset.x == x + i && c.dataset.y == y);
+        if (cell) {
+            cell.style.backgroundColor = isPlayer ? 'blue' : 'gray'; // Kolor dla gracza lub bota
         }
     }
 }
 
-createGrid();
-botBtn.addEventListener('click', () => {
-    // Zresetuj raport
-    log.textContent = ''; 
-    botTurn();
+// Funkcja wyboru kapitana
+function selectCaptain(captain) {
+    captainSelected = captain;
+    captainSelection.style.display = 'none';
+    shipPlacement.style.display = 'block';
+    createGrid(true);
+    createGrid(false); // Plansza bota na razie będzie tylko widoczna
+    logMsg(`Wybrano kapitana: ${captain}`);
+}
+
+// Funkcja na rozpoczęcie gry
+function startGame() {
+    shipPlacement.style.display = 'none';
+    // Gra się zaczyna, ustawiamy tury
+    logMsg('Gra rozpoczęta!');
+}
+
+// Dodajemy wybór kapitana
+document.getElementById('captainJack').addEventListener('click', () => selectCaptain('Jack Sparrow'));
+document.getElementById('captainSalazar').addEventListener('click', () => selectCaptain('Salazar'));
+document.getElementById('captainBeckett').addEventListener('click', () => selectCaptain('Lord Beckett'));
+document.getElementById('captainJones').addEventListener('click', () => selectCaptain('Davy Jones'));
+
+// Ustawienie okrętu
+gridPlayer.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('cell')) return;
+    const x = parseInt(e.target.dataset.x);
+    const y = parseInt(e.target.dataset.y);
+    placeShip(x, y, 3, true); // Umieszczamy okręt o rozmiarze 3 na wybranej pozycji
 });
 
-// Przykład użycia sonaru – przycisk do testu
-const sonarBtn = document.createElement('button');
-sonarBtn.textContent = 'Użyj sonaru';
-document.body.appendChild(sonarBtn);
-sonarBtn.addEventListener('click', () => useSonar(5, 5)); // Przykładowe współrzędne
+// Rozpoczynamy grę
+startBtn.addEventListener('click', startGame);
+
+// Tura bota
+botBtn.addEventListener('click', () => {
+    // Bot wykonuje turę, to możesz rozwinąć w zależności od implementacji
+    logMsg('Bot wykonuje turę...');
+});
